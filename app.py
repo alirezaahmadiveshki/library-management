@@ -1,5 +1,7 @@
 import customtkinter
 from pprint import pprint
+import os
+
 
 class Uni():
     Libraries = []
@@ -54,6 +56,35 @@ class Book():
         print(f"name: {self.name}\nrelease date: {self.rel_date}\nauthor/writer: {self.author}\ngenre: {self.genre}")
         print("-" * 40)
 
+
+
+def fetch_add_book(lib_name, book_list):
+    book_objects = []
+    for book in book_list:
+        book = book.split()
+        b = Book(book[0], book[1], book[2], book[3])
+        book_objects.append(b)
+    
+    lib_name_list = lib_name.split("-")
+    id = lib_name_list[0]
+    name = lib_name_list[1][:-4]
+    lib = Library(name, id, book_objects)
+    Uni.Libraries.append(lib)
+        
+
+        
+
+
+def fetch():
+    def library_file_path():
+        mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\library-management\Uni"
+        libaries_List = os.listdir(mother_dir)
+        for library_name in libaries_List:
+            library_path = f"{mother_dir}/{library_name}"
+            with open(library_path, "r") as library_file:
+                book_list = library_file.readlines()
+                fetch_add_book(library_name, book_list)
+    library_file_path()
 
 
 
@@ -137,14 +168,14 @@ def request_pending(inp):
 
 
 def main():
-    make_window()
-    print("hello dear user :)")
-    while True:
-        inp = requset_gathering()
-        int_inp = request_validation(inp)
-        if int_inp == 0:
-            break
-        request_pending(int_inp)
+    fetch()
+    # make_window()
+    # print("hello dear user :)")
+    # while True:
+    #     inp = requset_gathering()
+    #     int_inp = request_validation(inp)
+    #     if int_inp == 0:
+    #         break
         
 
 
