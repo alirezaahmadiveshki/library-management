@@ -1,6 +1,5 @@
+import pandas as pd
 import os
-from pprint import pprint
-
 
 class Uni():
     """the university object
@@ -9,7 +8,7 @@ class Uni():
     """
 
     libraries = {} # a dict that include {"library-name": library-object}
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\library-management\Uni"
+    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files"
     # addres of the Uni directory
     # because we make an Uni object in the first line of the main function
     # so we are sure that we can acsses to this addres throughout our code
@@ -20,6 +19,9 @@ class Uni():
         for lib_name, lib in Uni.libraries.items():
             if name.lower() == lib_name.lower():
                 return lib
+        else:
+            print("library's name is wrong!")
+
 
 
     def add_lib(self, lib: "Library") -> None:
@@ -62,14 +64,10 @@ class Library():
     def __init__(self, name: str, id: int) -> None:
         self.name = name
         self.id = id
-        self.books = []
-        self.path = fR"{Uni.mother_dir}/{self.id}-{self.name}.txt"
-        self.file = File(f"{self.id}-{self.name}.txt")
-        self.file.remove_spaces()
-        for line in self.file.lines:
-            char_list = line.strip().split(" ")
-            b = Book(self.name, char_list[0], char_list[1], char_list[2], char_list[3])
-            self.books.append(b)
+        self.path = fR"{Uni.mother_dir}/{self.id}-{self.name}.csv"
+        self.file = File(f"{self.id}-{self.name}.csv")
+        self.books = self.file.book_initializer(self.name)
+
 
 
     def add_book(self, book: "Book") -> None:
@@ -85,6 +83,7 @@ class Library():
         self.file.create_line(book)
 
 
+
     def remove_book(self, book: "Book") -> None:
         """removing a book object:
         from the list: library's books attribute
@@ -93,7 +92,6 @@ class Library():
         self.books.remove(book) # removes the book from the books attribute of the library objects
         self.lib_info()
         self.file.remove_line(book.name)
-        self.file.remove_spaces()
 
             
 
@@ -107,9 +105,11 @@ class Library():
         if new_genre == "":
             new_genre = book.genre
 
-        self.remove_book(book)
-        edited_book = Book(self.name, new_name, new_rel_date, new_author, new_genre)            
-        self.add_book(edited_book)
+
+        new_book = Book(self.name, new_name, new_rel_date, new_author, new_genre)
+        self.file.remove_line(book.name)
+        self.file.create_line(new_book)
+
 
 
     def find_book(self, book_name):
@@ -152,61 +152,52 @@ class Book():
 
 
 class File():
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\library-management\Uni"
+    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files"
     def __init__(self, name) -> None:
         self.name = name
         self.path = fR"{File.mother_dir}\{self.name}"
-        self.amount = 0
-        self.lines = []
-        f = open(self.path, 'a') #creates the file if it's not created
-        f.close()
-        with open(self.path, 'r') as file:
-            for line in file:
-                self.amount += 1
-                self.lines.append(line)
-        self.remove_spaces()
+        self.df = self.data_frame_maker(self.path)
 
 
-    def show(self):
-        print(f"name: {self.name}\npath: {self.path}\namount: {self.amount}\n lines: {self.lines}")
+    def data_frame_maker(self, path):
+        df = pd.read_csv(fR"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files\{self.name}", delimiter=' ', names=["book", "release_date", "author", "genre"])
+        return df
 
 
-    def remove_spaces(self):
-        with open(self.path, 'r') as file:
-            self.lines = []
-            for line in file: 
-                if line != '\n':
-                    self.lines.append(line)
-        self.write()      
+    def book_initializer(self, libname):
+        books = []
+        for x in self.df.index:
+            name = self.df.loc[x, 'book']
+            release_date = self.df.loc[x, 'release_date']
+            author = self.df.loc[x, 'author']
+            genre = self.df.loc[x, 'genre']
+            b = Book(libname, name, release_date, author, genre)
+            books.append(b)
+        return books
+
+
+    def csv_writer(self):
+        self.df.to_csv(self.path,header=False, index=False, sep=' ')
 
 
     def remove_line(self, book_name):
-        for line in self.lines:
-            name = line.split(" ")[0]
-            if name.startswith('\n'):
-                name = name.strip()
-            if (name.lower() == book_name.lower()):
-                self.lines.remove(line)
-                self.write()
-                break
-        self.remove_spaces()
+        for index in self.df.index:
+            if self.df.loc[index, 'book'] == book_name:
+                self.df.drop(index, axis=0, inplace=True)
+        self.csv_writer()
 
-
-    def write(self):
-        with open(self.path, "w") as file:
-            file.writelines(self.lines)       
 
 
     def create_line(self, book):
-        self.lines.append(f"\n{book.name} {book.rel_date} {book.author} {book.genre}")
-        self.write()
-        self.remove_spaces()
-
+        data = {"book": [book.name], "release_date": [book.rel_date], "author": [book.author], "genre": [book.genre]}
+        df2 = pd.DataFrame(data)
+        self.df = pd.concat([self.df, df2], ignore_index=True)
+        self.csv_writer()
 
 
     def remove_file(self):
         os.remove(self.path)
-        
+
 
 
 class Request():
@@ -255,3 +246,5 @@ class Request():
             print("wrong input\nplease try again")
             print("-" * 40)
             return key, inp
+        
+
