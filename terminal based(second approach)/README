@@ -1,0 +1,3 @@
+in the second try; i used csv files instead of text files.
+and it was a lot easier; took about 30 minutes to convert the text based codes to this version.
+and it's because of that in default working with csv's and pandas library is quite automated.
