@@ -5,7 +5,7 @@ maybe adding some GUI later...
 
 first try:
 i tried using raw text files and not the modules and libraries like csv moudle and files or pandas library.
-it was harer that common approach. 
+it was harder that common approach. 
 in addition, this project was a great practice of OOP
 and for writing "classes.py" module i gained a great experience and a wider overview for OOP
 
