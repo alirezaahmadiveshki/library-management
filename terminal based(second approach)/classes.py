@@ -33,7 +33,8 @@ class Uni():
         :type lib: Library
         """
         Uni.libraries[lib.name] = lib
-        lib.file.write()
+        self.show_lib()
+        lib.file.file_open()
 
 
 
@@ -156,12 +157,18 @@ class File():
     def __init__(self, name) -> None:
         self.name = name
         self.path = fR"{File.mother_dir}\{self.name}"
+        self.file_open()
         self.df = self.data_frame_maker(self.path)
 
 
     def data_frame_maker(self, path):
         df = pd.read_csv(fR"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files\{self.name}", delimiter=' ', names=["book", "release_date", "author", "genre"])
         return df
+
+
+    def file_open(self):
+        with open(self.path, 'a') as file:
+            ...
 
 
     def book_initializer(self, libname):
