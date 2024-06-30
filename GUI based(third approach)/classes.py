@@ -266,9 +266,9 @@ class Request():
 
 
 class Window(customtkinter.CTk):
-    university = Uni()
     def __init__(self):
         super().__init__()
+        self.university = Uni()
         customtkinter.set_appearance_mode("system")
         customtkinter.set_default_color_theme("blue")
         self.title("Library Management")
@@ -330,13 +330,14 @@ class Window(customtkinter.CTk):
             self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
         
         self.messagebox.delete("0.0", "end")
-        text = Window.university.show_lib()
+        text = self.university.show_lib()
         text = f"{text}\nEnter the Below Informations: "
         self.messagebox.insert("0.0", text)
         labels = ["library's name: ", "book's name: ", "book's release date: ", "book's author: ", "book's genre: "]
         for i in range(7):
             self.label_maker("", i+9, 0)
             self.label_maker("", i+9, 1)
+        self.entries = []
         for i in range(5):
             self.label_maker(labels[i], i+9, 0)
             entry = self.entry_maker(i+9)
@@ -357,7 +358,7 @@ class Window(customtkinter.CTk):
             new_rel_date = self.text_entries[3]
             new_author = self.text_entries[4]
             new_genre = self.text_entries[5]
-            lib = Window.university.find_lib(lib_name)
+            lib = self.university.find_lib(lib_name)
             book = lib.find_book(book_name)
             print(book.book_info())
             lib.edit_book(book, new_book_name, new_rel_date, new_author, new_genre)
@@ -374,13 +375,14 @@ class Window(customtkinter.CTk):
 
 
         self.messagebox.delete("0.0", "end")
-        text = Window.university.show_lib()
+        text = self.university.show_lib()
         text = f"{text}\nEnter the Below Informations: "
         self.messagebox.insert("0.0", text)
         labels = ["library's name: ", "book's name: ", "new book's name: ", "new book's release date: ", "new book's author: ", "new book's genre: "]
         for i in range(7):
             self.label_maker("", i+9, 0)
             self.label_maker("", i+9, 1)
+        self.entries = []
         for i in range(6):
             self.label_maker(labels[i], i+9, 0)
             entry = self.entry_maker(i+9)
@@ -395,12 +397,12 @@ class Window(customtkinter.CTk):
                 text_entry = entry.get()
                 self.text_entries.append(text_entry)
             book_name = self.text_entries[0]
-            for lib in Window.university.libraries.values(): # for every library in database
+            for lib in self.university.libraries.values(): # for every library in database
                 book = lib.find_book(book_name) # return the object of the book with given name [output: NoneType | book object]
                 if book: 
                     output = book.book_info()
             output += "remain libraries\n"
-            output += Window.university.show_lib()
+            output += self.university.show_lib()
             self.messagebox.delete("0.0", "end")
             self.messagebox.insert("0.0", output)
         
@@ -410,13 +412,14 @@ class Window(customtkinter.CTk):
             self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
         
         self.messagebox.delete("0.0", "end")
-        text = Window.university.show_lib()
+        text = self.university.show_lib()
         text = f"{text}\nEnter the Below Informations: "
         self.messagebox.insert("0.0", text)
         labels = ["book's name: "]
         for i in range(7):
             self.label_maker("", i+9, 0)
             self.label_maker("", i+9, 1)
+        self.entries = []
         for i in range(1):
             self.label_maker(labels[i], i+9, 0)
             entry = self.entry_maker(i+9)
@@ -432,7 +435,7 @@ class Window(customtkinter.CTk):
                 self.text_entries.append(text_entry)
             lib_name = self.text_entries[0]
             book_name = self.text_entries[1]
-            lib = Window.university.find_lib(lib_name)
+            lib = self.university.find_lib(lib_name)
             book = lib.find_book(book_name)
             lib.remove_book(book)
             output = ""
@@ -446,13 +449,14 @@ class Window(customtkinter.CTk):
             self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
         
         self.messagebox.delete("0.0", "end")
-        text = Window.university.show_lib()
+        text = self.university.show_lib()
         text = f"{text}\nEnter the Below Informations: "
         self.messagebox.insert("0.0", text)
         labels = ["library's name: ", "book's name: "]
         for i in range(7):
             self.label_maker("", i+9, 0)
             self.label_maker("", i+9, 1)
+        self.entries = []
         for i in range(2):
             self.label_maker(labels[i], i+9, 0)
             entry = self.entry_maker(i+9)
@@ -469,7 +473,7 @@ class Window(customtkinter.CTk):
                 self.text_entries.append(text_entry)
             lib_name = self.text_entries[0]
             lib_id = self.text_entries[1]
-            Window.university.add_lib(Library(lib_name, lib_id))
+            self.university.add_lib(Library(lib_name, lib_id))
             output = ""
             output += f"{lib_name} is seccesfully added"
             self.messagebox.delete("0.0", "end")
@@ -481,13 +485,14 @@ class Window(customtkinter.CTk):
             self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
         
         self.messagebox.delete("0.0", "end")
-        text = Window.university.show_lib()
+        text = self.university.show_lib()
         text = f"{text}\nEnter the Below Informations: "
         self.messagebox.insert("0.0", text)
         labels = ["library's name: ", "library's id: "]
         for i in range(7):
             self.label_maker("", i+9, 0)
             self.label_maker("", i+9, 1)
+        self.entries = []
         for i in range(2):
             self.label_maker(labels[i], i+9, 0)
             entry = self.entry_maker(i+9)
@@ -503,12 +508,12 @@ class Window(customtkinter.CTk):
                 self.text_entries.append(text_entry)
             lib_name = self.text_entries[0]
             lib_name = lib_name.lower()
-            lib = Window.university.libraries[lib_name]
-            Window.university.remove_lib(lib)
+            lib = self.university.libraries[lib_name]
+            self.university.remove_lib(lib)
             output = ""
             output += f"{lib_name} is succesfully removed\n"
             output += "remain libraries\n"
-            output += Window.university.show_lib()
+            output += self.university.show_lib()
             self.messagebox.delete("0.0", "end")
             self.messagebox.insert("0.0", output)
         
@@ -518,13 +523,14 @@ class Window(customtkinter.CTk):
             self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
         
         self.messagebox.delete("0.0", "end")
-        text = Window.university.show_lib()
+        text = self.university.show_lib()
         text = f"{text}\nEnter the Below Informations: "
         self.messagebox.insert("0.0", text)
         labels = ["library's name: "]
         for i in range(7):
             self.label_maker("", i+9, 0)
             self.label_maker("", i+9, 1)
+        self.entries = []
         for i in range(1):
             self.label_maker(labels[i], i+9, 0)
             entry = self.entry_maker(i+9)
@@ -534,6 +540,7 @@ class Window(customtkinter.CTk):
 
     def func_lib_info(self):
         def submit_button_func():
+            print(self.entries)
             self.text_entries = []
             for entry in self.entries:
                 text_entry = entry.get()
@@ -551,13 +558,14 @@ class Window(customtkinter.CTk):
             self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
         
         self.messagebox.delete("0.0", "end")
-        text = Window.university.show_lib()
+        text = self.university.show_lib()
         text = f"{text}\nEnter the Below Informations: "
         self.messagebox.insert("0.0", text)
         labels = ["library's name: "]
         for i in range(6):
             self.label_maker("", i+9, 0)
             self.label_maker("", i+9, 1)
+        self.entries = []
         for i in range(1):
             self.label_maker(labels[i], i+9, 0)
             entry = self.entry_maker(i+9)

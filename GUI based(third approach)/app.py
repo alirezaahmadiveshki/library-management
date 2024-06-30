@@ -18,6 +18,8 @@ def fetch():
 
 def make_window():
     win = Window()
+    university = Uni()
+    win.university = university
     win.mainloop()
 
 
