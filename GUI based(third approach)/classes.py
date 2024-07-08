@@ -9,7 +9,7 @@ class Uni():
     """
 
     libraries = {} # a dict that include {"library-name": library-object}
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files"
+    mother_dir = R"Uni\csv files"
     # addres of the Uni directory
     # because we make an Uni object in the first line of the main function
     # so we are sure that we can acsses to this addres throughout our code
@@ -54,11 +54,11 @@ class Uni():
 
     def show_lib(self):
         str = ""
-        str += "*"*40
+        str += "*"*30
         str += "\n\tlibraries: "
         for lib in self.libraries.keys():
             str += f'\n{lib}'    
-        str += "\n" + "*"*40
+        str += "\n" + "*"*30
         return str
 
 
@@ -129,7 +129,7 @@ class Library():
         """prints out the library information by it's name
         """
         str = ""
-        str = "-" * 40
+        str = "-" * 30
         str += f"\nname: {self.name}\nid: {self.id}\n\tlist of the books:"
         for book in self.books:
             str += book.book_info()
@@ -162,7 +162,7 @@ class Book():
 
 
 class File():
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files"
+    mother_dir = R"Uni\csv files"
     def __init__(self, name) -> None:
         self.name = name
         self.path = fR"{File.mother_dir}\{self.name}"
@@ -171,7 +171,7 @@ class File():
 
 
     def data_frame_maker(self, path):
-        df = pd.read_csv(fR"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files\{self.name}", delimiter=' ', names=["book", "release_date", "author", "genre"])
+        df = pd.read_csv(fR"Uni\csv files\{self.name}", delimiter=' ', names=["book", "release_date", "author", "genre"])
         return df
 
 
@@ -215,64 +215,14 @@ class File():
         os.remove(self.path)
 
 
-
-class Request():
-    def gathering(self):
-        """prints out the user interface in the termainal
-
-        :return: inp: input that is gathered    
-        :rtype: String
-        """
-        print("-" * 40)
-        print("choose on of the below options :")
-        print("BOOKS:")
-        print("\t1 for ADD a book")
-        print("\t2 for DELETING a book")
-        print("\t3 for EDITING A BOOK")
-        print("\t4 for book info")
-        print("libraries:")
-        print("\t5 for ADD a library")
-        print("\t6 for DELETING a library")
-        print("\t7 for library info")
-        print("\t0 for the QUITING")
-        inp = input("choose your request: ")
-        return inp
-    
-
-    def validation(self, inp):
-        """controls that if the user input is validated or not
-
-        :param inp: the input of this function is the output of the request_gathering function
-        :type inp: String
-        :raises ValueError: if the inp wasn't an integer between 0 to 7
-        :return: the exact function with diffrent input that we have in the except block
-        :rtype: Funcion
-        """
-        key = False
-        try:
-            int_inp = int(inp)
-            if 0 <= int_inp <= 7:
-                key = True
-                return (key, int_inp)
-            else:
-                raise ValueError
-        except Exception:
-            print("-" * 40)
-            print("wrong input\nplease try again")
-            print("-" * 40)
-            return key, inp
-        
-
-
-
 class Window(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.university = Uni()
         customtkinter.set_appearance_mode("system")
-        customtkinter.set_default_color_theme("blue")
+        customtkinter.set_default_color_theme("dark-blue")
         self.title("Library Management")
-        self.minsize(700,1000)
+        self.minsize(1000,500)
         #buttons
         self.grid_columnconfigure(1, weight=1)
         self.book_add = customtkinter.CTkButton(self, text = "add a book", command=self.func_book_add)
@@ -283,20 +233,17 @@ class Window(customtkinter.CTk):
         self.lib_del = customtkinter.CTkButton(self, text = "deleting a library", command=self.func_lib_del)
         self.lib_info = customtkinter.CTkButton(self, text = "information of a library", command=self.func_lib_info)
         self.exit_button = customtkinter.CTkButton(self, text = "Exit",command = self.destroy)
-        self.book_del.grid(row=0 , column=0, padx=10, pady=6)
-        self.book_add.grid(row=1 , column=0, padx=10, pady=6)
-        self.book_edit.grid(row=2 , column=0, padx=10, pady=6)
-        self.book_info.grid(row=3 , column=0, padx=10, pady=6)
-        self.lib_add.grid(row=4 , column=0, padx=10, pady=6)
-        self.lib_del.grid(row=5 , column=0, padx=10, pady=6)
-        self.lib_info.grid(row=6 , column=0, padx=10, pady=6)
-        self.exit_button.grid(row=7 , column=0, padx=10, pady=6) 
+        self.book_del.grid(row=0 , column=0, padx=10, pady=6, ipadx=20, ipady=5)
+        self.book_add.grid(row=1 , column=0, padx=10, pady=6, ipadx=20, ipady=5)
+        self.book_edit.grid(row=2 , column=0, padx=10, pady=6, ipadx=20, ipady=5)
+        self.book_info.grid(row=3 , column=0, padx=10, pady=6, ipadx=20, ipady=5)
+        self.lib_add.grid(row=4 , column=0, padx=10, pady=6, ipadx=20, ipady=5)
+        self.lib_del.grid(row=5 , column=0, padx=10, pady=6, ipadx=20, ipady=5)
+        self.lib_info.grid(row=6 , column=0, padx=10, pady=6, ipadx=20, ipady=5)
+        self.exit_button.grid(row=7 , column=0, padx=10, pady=6, ipadx=20, ipady=5) 
 
-        self.messagebox = customtkinter.CTkTextbox(self, font=("", 20))
-        self.messagebox.grid(row=0, column=1, sticky="nesw", rowspan=8)
-        # self.messagebox.insert("0.0", text="life is amazing")
-        # self.messagebox.delete("0.0", "end")
-        # self.messagebox.insert("0.0", text="life is amazing")
+        self.messagebox = customtkinter.CTkTextbox(self, font=("Microsoft YaHei", 20))
+        self.messagebox.grid(row=0, column=1, sticky="nesw", rowspan=8, pady=10, padx=10)
 
         self.button = customtkinter.CTkButton(self)
         self.entries = []
@@ -327,7 +274,7 @@ class Window(customtkinter.CTk):
         def submit_button_maker(n):
             self.button.destroy()
             self.button = customtkinter.CTkButton(self, text = "submit", height=70, command=submit_button_func)
-            self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
+            self.button.grid(row=n, column=0, columnspan=2, pady=20, padx=20, sticky="news")
         
         self.messagebox.delete("0.0", "end")
         text = self.university.show_lib()
@@ -401,7 +348,7 @@ class Window(customtkinter.CTk):
                 book = lib.find_book(book_name) # return the object of the book with given name [output: NoneType | book object]
                 if book: 
                     output = book.book_info()
-            output += "remain libraries\n"
+            output += "\n"
             output += self.university.show_lib()
             self.messagebox.delete("0.0", "end")
             self.messagebox.insert("0.0", output)
@@ -553,7 +500,7 @@ class Window(customtkinter.CTk):
             self.messagebox.insert("0.0", output)
         
         def submit_button_maker(n):
-            self.button.destroy()
+            self.button.destroy()   
             self.button = customtkinter.CTkButton(self, text = "submit", height=70, command=submit_button_func)
             self.button.grid(row=n, column=0, columnspan = 2,pady = 20,padx=30, sticky="nesw")
         
@@ -575,11 +522,11 @@ class Window(customtkinter.CTk):
 
 
     def label_maker(self, label, row, column):
-        my_label = customtkinter.CTkLabel(self, text=label)
-        my_label.grid(row=row, column=column, sticky='nesw', pady= 20, padx= 40)
+        my_label = customtkinter.CTkLabel(self, text=label, font=("Cascadia Code", 15))
+        my_label.grid(row=row, column=column, sticky='nesw', pady= 10, padx= 20)
         return my_label
 
     def entry_maker(self, row):
-        my_entry = customtkinter.CTkEntry(self)
-        my_entry.grid(row =row, column=1, sticky='nesw', pady= 20, padx= 40)
+        my_entry = customtkinter.CTkEntry(self, font=("Cascadia Code", 15))
+        my_entry.grid(row =row, column=1, sticky='nesw', pady= 10, padx= 20)
         return my_entry

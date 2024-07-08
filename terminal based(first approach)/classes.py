@@ -9,7 +9,7 @@ class Uni():
     """
 
     libraries = {} # a dict that include {"library-name": library-object}
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\text files"
+    mother_dir = R"Uni\text files"
     # addres of the Uni directory
     # because we make an Uni object in the first line of the main function
     # so we are sure that we can acsses to this addres throughout our code
@@ -155,7 +155,7 @@ class Book():
 
 
 class File():
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\text files"
+    mother_dir = R"Uni\text files"
     def __init__(self, name) -> None:
         self.name = name
         self.path = fR"{File.mother_dir}\{self.name}"

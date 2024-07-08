@@ -8,7 +8,7 @@ class Uni():
     """
 
     libraries = {} # a dict that include {"library-name": library-object}
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files"
+    mother_dir = R"Uni\csv files"
     # addres of the Uni directory
     # because we make an Uni object in the first line of the main function
     # so we are sure that we can acsses to this addres throughout our code
@@ -153,7 +153,7 @@ class Book():
 
 
 class File():
-    mother_dir = R"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files"
+    mother_dir = R"Uni\csv files"
     def __init__(self, name) -> None:
         self.name = name
         self.path = fR"{File.mother_dir}\{self.name}"
@@ -162,7 +162,7 @@ class File():
 
 
     def data_frame_maker(self, path):
-        df = pd.read_csv(fR"C:\Users\PSK\Documents\GitHub\library-management\Uni\csv files\{self.name}", delimiter=' ', names=["book", "release_date", "author", "genre"])
+        df = pd.read_csv(fR"Uni\csv files\{self.name}", delimiter=' ', names=["book", "release_date", "author", "genre"])
         return df
 
 
